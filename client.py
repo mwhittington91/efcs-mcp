@@ -1,23 +1,28 @@
 import asyncio
-from fastmcp import FastMCP
+
+from fastmcp import Client
+from fastmcp.client.transports import SSETransport
+
+client = Client("server.py")
+#client = Client(transport=SSETransport("http://0.0.0.0:8000/sse"))
 
 
 async def main():
-    # Create an MCP client that connects to your local server
-    client = FastMCP(name="ECFS", host="localhost", port=8000, transport="sse")
+    # Connection is established here
+    async with client:
+        print(f"Client connected: {client.is_connected()}")
+        print(client.transport)
 
-    # Get available tools
-    tools = await client.get_tools()
-    print(f"Available tools: {', '.join([t.name for t in tools.values()])}")
+        # Make MCP calls within the context
+        tools = await client.list_tools()
+        print(f"Available tools: {[tool.name for tool in tools]}")
 
-    # Get available resources
-    resources = await client.get_resources()
-    print(f"Available resources: {', '.join([r.name for r in resources.values()])}")
+        # if any(tool.name == "get_filings" for tool in tools):
+        #     result = await client.call_tool("get_filings", {"q": "NCTA"})
+        #     print(f"Greet result: {result}")
 
-    # Example of using a tool (replace with actual tool name from your API)
-    # tool = tools["your_tool_name"]
-    # result = await tool.execute(params={})
-    # print(f"Tool result: {result}")
+    # Connection is closed automatically here
+    print(f"Client connected: {client.is_connected()}")
 
 
 if __name__ == "__main__":
