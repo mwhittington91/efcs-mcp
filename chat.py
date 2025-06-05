@@ -9,14 +9,14 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=api_key)
 
-def chat_mcp(input_text: str, show_tool_calls: bool) -> str:
+def chat_mcp(input_text: str, show_tool_calls: bool = False) -> str:
     resp = client.responses.create(
         model="gpt-4.1",
         tools=[
             {
                 "type": "mcp",
-                "server_label": "ecfs",
-                "server_url": "https://ecfs-mcp-server.azurewebsites.net/sse",
+                "server_label": "pg",
+                "server_url": "http://localhost:8000/sse",
                 "require_approval": "never",
             },
         ],
@@ -35,4 +35,4 @@ def chat_mcp(input_text: str, show_tool_calls: bool) -> str:
     return resp.output_text
 
 if __name__ == "__main__":
-    print(chat_mcp("Give me the 5 latest filing on spectrum", show_tool_calls=True))
+    print(chat_mcp("What are the tables in the database?"))
