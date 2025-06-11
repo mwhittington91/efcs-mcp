@@ -15,20 +15,6 @@ transport = "sse"
 # Create a client for your API
 api_client = httpx.AsyncClient(base_url="https://publicapi.fcc.gov/ecfs/")
 
-
-# Load your OpenAPI spec
-# def get_spec():
-#     with open("ECFS-OPENAPI-Spec.yaml", "r") as f:
-#         spec = yaml.safe_load(f)
-#     return spec
-
-
-# custom_maps = [
-#     # Force all endpoints to be Tools
-#     RouteMap(methods=["GET"], pattern="", route_type=RouteType.TOOL)
-# ]
-
-
 def get_api_key() -> str:
     """Get the API key from the environment variable"""
     return os.getenv("ECFS_API_KEY")
@@ -83,21 +69,7 @@ async def fetch(id_submission: str):
     resp.raise_for_status()
     return resp.json()
 
-
-# Create an MCP server from your OpenAPI spec
-# mcp = FastMCP.from_openapi(
-#     openapi_spec=spec,
-#     client=api_client,
-#     name="ECFS",
-#     timeout=5.0,
-#     route_maps=custom_maps,
-#     host="0.0.0.0",
-#     port=8000,
-#     path="/sse",
-# )
-
 mcp = FastMCP(
-    client=api_client,
     name="ECFS",
     timeout=5.0,
     host="0.0.0.0",
