@@ -2,11 +2,8 @@ import asyncio
 import os
 
 import httpx
-import yaml
 from dotenv import load_dotenv
 from fastmcp import FastMCP
-from fastmcp.server.openapi import RouteMap, RouteType
-
 
 load_dotenv()
 
@@ -71,10 +68,7 @@ async def fetch(id_submission: str):
 
 mcp = FastMCP(
     name="ECFS",
-    timeout=5.0,
-    host="0.0.0.0",
-    port=8000,
-    path="/sse",
+    instructions="You are a helpful assistant that can search and fetch FCC filings.",
 )
 
 mcp.add_tool(get_api_key)
